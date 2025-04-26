@@ -95,13 +95,6 @@ export default function ProfilePage() {
     },
   });
 
-  function joinUrl(base, path) {
-    return base?.replace(/\/+$/, '') + '/' + path?.replace(/^\/+/, '');
-  }
-
-  // Usage
-  const fullUrl = joinUrl(API_BASE_URL, user?.photoUrl);
-
   console.log(`${API_BASE_URL}/${user?.photoUrl}`);
 
   return (
@@ -120,7 +113,7 @@ export default function ProfilePage() {
                 <img
                   src={
                     user?.photoUrl
-                      ? joinUrl(API_BASE_URL, user?.photoUrl)
+                      ? user?.photoUrl
                       : '/placeholder.svg?height=128&width=128'
                   }
                   alt='Profile'
@@ -223,11 +216,9 @@ export default function ProfilePage() {
                   <div className='mx-auto mt-6 w-32 h-32 rounded-full overflow-hidden bg-muted relative group'>
                     <img
                       src={
-                        photoPreview
-                          ? photoPreview
-                          : user?.photoUrl
-                          ? joinUrl(API_BASE_URL, user.photoUrl)
-                          : '/placeholder.svg?height=128&width=128'
+                        photoPreview ||
+                        user?.photoUrl ||
+                        '/placeholder.svg?height=128&width=128'
                       }
                       alt='Profile'
                       className='w-full h-full object-cover'
