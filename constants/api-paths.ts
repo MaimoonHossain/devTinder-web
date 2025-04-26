@@ -9,6 +9,8 @@ export const API_PATHS = {
   UPDATE_PROFILE: '/user/profile',
   // User Profile
   USER_PROFILE: '/profile/view',
+  USER_FEED: '/feed',
+  PROFILE_EDIT: '/profile/edit',
 
   // Connections
   CONNECTIONS: '/connections',

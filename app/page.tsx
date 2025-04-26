@@ -1,32 +1,46 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
-import { motion } from 'framer-motion';
-import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { useApi } from '@/hooks/use-api';
+import { API_PATHS } from '@/constants/api-paths';
+import UserCard from '@/components/general/feed/UserCard';
+
+interface User {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  age: number;
+  gender: string;
+  photoUrl: string;
+  about: string;
+  skills: string[];
+}
 
 export default function Home() {
+  const { get } = useApi();
+  const [users, setUsers] = useState<User[]>([]);
+
+  const fetchFeed = async () => {
+    try {
+      const data = await get(API_PATHS.USER_FEED);
+      setUsers(data.users);
+    } catch (error) {
+      console.error('Failed to fetch users:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchFeed();
+  }, []);
+
   return (
     <div className='container mx-auto px-4 py-12'>
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className='text-center'
-      >
-        <h1 className='text-4xl font-bold mb-6'>Welcome to DevTinder</h1>
-        <p className='text-lg text-muted-foreground mb-8'>
-          A professional starter template with shadcn/ui, Framer Motion, and
-          more
-        </p>
-        <div className='flex gap-4 justify-center'>
-          <Button asChild>
-            <Link href='/login'>Get Started</Link>
-          </Button>
-          <Button variant='outline' asChild>
-            <Link href='/connections'>Explore</Link>
-          </Button>
-        </div>
-      </motion.div>
+      <h1 className='text-3xl font-bold mb-8'>User Feed</h1>
+      <div className='grid gap-6 md:grid-cols-2 lg:grid-cols-3'>
+        {users.map((user) => (
+          <UserCard key={user._id} user={user} />
+        ))}
+      </div>
     </div>
   );
 }

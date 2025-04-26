@@ -102,6 +102,18 @@ export function useApi() {
     }
   };
 
+  const patch = async (url: string, data = {}, config = {}) => {
+    setIsLoading(true);
+    try {
+      const response = await api.patch(url, data, config);
+      return response.data;
+    } catch (error) {
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const del = async (url: string) => {
     setIsLoading(true);
     try {
@@ -118,6 +130,7 @@ export function useApi() {
     get,
     post,
     put,
+    patch,
     del,
     isLoading,
   };
