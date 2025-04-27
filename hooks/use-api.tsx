@@ -78,10 +78,10 @@ export function useApi() {
     }
   };
 
-  const post = async (url: string, data = {}) => {
+  const post = async (url: string, data = {}, config = {}) => {
     setIsLoading(true);
     try {
-      const response = await api.post(url, data);
+      const response = await api.post(url, data, config);
       return response.data;
     } catch (error) {
       throw error;

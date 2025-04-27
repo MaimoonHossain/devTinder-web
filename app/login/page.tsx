@@ -88,7 +88,7 @@ export default function LoginPage() {
               />
             </form>
           </CardContent>
-          <CardFooter>
+          <CardFooter className='flex flex-col gap-2'>
             <Button
               className='w-full'
               onClick={() => formik.handleSubmit()}
@@ -96,6 +96,16 @@ export default function LoginPage() {
             >
               {isLoading ? 'Logging in...' : 'Login'}
             </Button>
+            <p className='text-sm mt-4'>
+              Don&apos;t have an account?{' '}
+              <button
+                type='button'
+                className='text-blue-500 underline'
+                onClick={() => router.push('/signup')}
+              >
+                Sign Up
+              </button>
+            </p>
           </CardFooter>
         </Card>
       </motion.div>
