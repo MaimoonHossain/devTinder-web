@@ -22,9 +22,15 @@ interface Props {
   user: User;
   onIgnore?: () => void;
   onInterested?: () => void;
+  hideActions?: boolean; // <-- add this
 }
 
-const UserCard = ({ user, onIgnore, onInterested }: Props) => {
+const UserCard = ({
+  user,
+  onIgnore,
+  onInterested,
+  hideActions = false,
+}: Props) => {
   return (
     <Card className='w-full max-w-sm hover:shadow-lg transition-shadow'>
       <CardContent className='pt-6'>
@@ -66,20 +72,23 @@ const UserCard = ({ user, onIgnore, onInterested }: Props) => {
         )}
       </CardContent>
 
-      <CardFooter className='flex justify-between gap-3'>
-        <Button variant='outline' className='flex-1 gap-2' onClick={onIgnore}>
-          <X className='h-4 w-4' />
-          Ignore
-        </Button>
-        <Button
-          variant='default'
-          className='flex-1 gap-2 bg-rose-500 hover:bg-rose-600'
-          onClick={onInterested}
-        >
-          <Heart className='h-4 w-4 fill-current' />
-          Interested
-        </Button>
-      </CardFooter>
+      {/* Only show footer if actions are not hidden */}
+      {!hideActions && (
+        <CardFooter className='flex justify-between gap-3'>
+          <Button variant='outline' className='flex-1 gap-2' onClick={onIgnore}>
+            <X className='h-4 w-4' />
+            Ignore
+          </Button>
+          <Button
+            variant='default'
+            className='flex-1 gap-2 bg-rose-500 hover:bg-rose-600'
+            onClick={onInterested}
+          >
+            <Heart className='h-4 w-4 fill-current' />
+            Interested
+          </Button>
+        </CardFooter>
+      )}
     </Card>
   );
 };

@@ -13,6 +13,8 @@ export const API_PATHS = {
   PROFILE_EDIT: '/profile/edit',
 
   // Connections
-  CONNECTIONS: '/connections',
-  TOGGLE_CONNECTION: '/connections/toggle',
+  USER_CONNECTIONS: '/user/connections',
+  USER_REQUESTS: '/user/requests/received',
+  REVIEW_USER_REQUEST: '/request/review',
+  SEND_CONNECTION_REQUEST: '/request/send',
 };

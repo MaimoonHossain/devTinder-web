@@ -137,6 +137,12 @@ export default function Navbar() {
                     <DropdownMenuItem asChild>
                       <Link href='/profile'>Profile</Link>
                     </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href='/connections'>Connections</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href='/requests'>Requests</Link>
+                    </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => logout()}>
                       Logout
                     </DropdownMenuItem>

@@ -7,7 +7,7 @@ import { API_PATHS } from '@/constants/api-paths';
 import toast from 'react-hot-toast';
 import UserCard from '@/components/general/feed/UserCard';
 
-interface Connection {
+interface RequestUser {
   _id: string;
   firstName: string;
   lastName: string;
@@ -18,38 +18,55 @@ interface Connection {
   skills: string[];
 }
 
-export default function ConnectionsPage() {
-  const [connections, setConnections] = useState<Connection[]>([]);
+export default function RequestsPage() {
+  const [requests, setRequests] = useState<RequestUser[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const { get } = useApi();
+  const { get, post } = useApi();
 
   useEffect(() => {
-    const fetchConnections = async () => {
+    const fetchRequests = async () => {
       try {
-        const data = await get(API_PATHS.USER_CONNECTIONS);
-        setConnections(data.filteredConnections || []);
+        const data = await get(API_PATHS.USER_REQUESTS);
+        setRequests(data.connectionRequests || []);
       } catch (error) {
-        toast.error('Failed to load connections');
+        toast.error('Failed to load requests');
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchConnections();
+    fetchRequests();
   }, []);
+
+  const reviewRequest = async (
+    userId: string,
+    status: 'accepted' | 'rejected'
+  ) => {
+    try {
+      await post(`${API_PATHS.REVIEW_USER_REQUEST}/${status}/${userId}`);
+      toast.success(
+        `Request ${status === 'accepted' ? 'accepted' : 'rejected'}`
+      );
+      setRequests((prev) => prev.filter((user) => user._id !== userId));
+    } catch (error) {
+      toast.error(
+        `Failed to ${status === 'accepted' ? 'accept' : 'reject'} request`
+      );
+    }
+  };
 
   if (isLoading) {
     return (
       <div className='container mx-auto px-4 py-12 text-center'>
-        Loading connections...
+        Loading requests...
       </div>
     );
   }
 
-  if (connections.length === 0) {
+  if (requests.length === 0) {
     return (
       <div className='container mx-auto px-4 py-12 text-center'>
-        No connections found.
+        No requests found.
       </div>
     );
   }
@@ -61,18 +78,21 @@ export default function ConnectionsPage() {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
       >
-        <h1 className='text-3xl font-bold mb-8'>Your Connections</h1>
+        <h1 className='text-3xl font-bold mb-8'>User Requests</h1>
 
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
-          {connections.map((connection) => (
+          {requests.map((user) => (
             <motion.div
-              key={connection._id}
+              key={user._id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3 }}
             >
-              {/* Reuse UserCard, but no actions */}
-              <UserCard user={connection} hideActions={true} />
+              <UserCard
+                user={user?.fromUserId}
+                onIgnore={() => reviewRequest(user._id, 'rejected')}
+                onInterested={() => reviewRequest(user._id, 'accepted')}
+              />
             </motion.div>
           ))}
         </div>
